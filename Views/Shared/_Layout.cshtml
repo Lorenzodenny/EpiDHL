@@ -19,10 +19,31 @@
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Informazioni", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Informazioni", "LoggedIn", "Users", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Contatto", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Aggiungi Cliente", "Add", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Logga", "Index", "Login", new { area = "" }, new { @class = "nav-link" })</li>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+
+                        <li>@Html.ActionLink("Aggiungi Cliente", "Add", "Home", new { area = "" }, new { @class = "btn btn-success" })</li>
+                        using (Html.BeginForm("Logout", "Users"))
+                        {
+                            @Html.AntiForgeryToken()
+                            <li><button class="btn btn-danger ms-3">Logout</button></li>
+                        }
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "Users", new { area = "" }, new { @class = "btn btn-primary" })</li>
+                        <li>@Html.ActionLink("Registrati", "Signup", "Users", new { area = "" }, new { @class = "btn btn-primary ms-3" })</li>
+                    }
+                    @using (Html.BeginForm("Ricerca", "Home", FormMethod.Post, new { @class = "form-inline my-2 my-lg-0" }))
+                    {
+                        <div class="d-flex">
+                            <input class="form-control mr-sm-2 ms-3" type="search" placeholder="Cerca cliente" aria-label="Cerca" name="Nome">
+                            <button class="btn btn-outline-success my-2 my-sm-0  ms-3" type="submit">Cerca</button>
+                        </div>
+                    }
                 </ul>
             </div>
         </div>
@@ -38,6 +59,6 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-    
+
 </body>
 </html>

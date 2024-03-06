@@ -12,9 +12,13 @@
             if ($(this).is(':checked')) {
                 $('#Cod_FiscContainer').hide();
                 $('#PIContainer').show();
+                $('#Cod_Fisc').prop('disabled', true).val(''); // Disabilita e svuota Cod_Fisc
+                $('#PI').prop('disabled', false).val('Inserisci il nome dell\' azinda'); // Abilita e imposta valore per PI
             } else {
                 $('#Cod_FiscContainer').show();
                 $('#PIContainer').hide();
+                $('#Cod_Fisc').prop('disabled', false).val('Inserisci Nome Cliente'); // Abilita e imposta valore per Cod_Fisc
+                $('#PI').prop('disabled', true).val(''); // Disabilita e svuota PI
             }
         });
 
@@ -22,12 +26,25 @@
         if ($('#Azienda').is(':checked')) {
             $('#Cod_FiscContainer').hide();
             $('#PIContainer').show();
+            $('#Cod_Fisc').prop('disabled', true).val(''); // Disabilita e svuota Cod_Fisc
+            $('#PI').prop('disabled', false).val('Inserisci il nome dell\' azinda'); // Abilita e imposta valore per PI
         } else {
             $('#Cod_FiscContainer').show();
             $('#PIContainer').hide();
+            $('#Cod_Fisc').prop('disabled', false).val('Inserisci Nome Cliente'); // Abilita e imposta valore per Cod_Fisc
+            $('#PI').prop('disabled', true).val(''); // Disabilita e svuota PI
         }
     });
 </script>
+
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
 
 @{
     bool isSubmitted = false;
@@ -44,6 +61,8 @@
 
 @using (Html.BeginForm())
 {
+
+    @Html.AntiForgeryToken()
     <div class="form-group" id="AziendaContainer">
         @Html.LabelFor(m => m.Azienda, new { @class = "form-label" })
         <div class="form-check">
@@ -80,7 +99,9 @@
     @Html.EditorFor(m => m.Cognome, new { htmlAttributes = new { @class = "form-control" } })
     @Html.ValidationMessageFor(m => m.Cognome)
 
-    
+
 
     <button class="btn btn-primary">Submit</button>
 }
+
+

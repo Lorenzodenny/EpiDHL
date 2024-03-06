@@ -1,0 +1,38 @@
+﻿@model EpiDHL.Models.Cliente
+
+@{
+    ViewBag.Title = "Ricerca";
+}
+
+<h2>Ricerca Cliente</h2>
+
+@using (Html.BeginForm("Ricerca", "Home", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Nome, "Nome Cliente:")
+        @Html.TextBoxFor(model => model.Nome, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Cerca</button>
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@if (Model != null)
+{
+    <h3>Risultati della ricerca:</h3>
+    <p>Cliente ID: @Model.Cliente_ID</p>
+    <p>Azienda: @Model.Azienda</p>
+    <p>Codice Fiscale: @Model.Cod_Fisc</p>
+    <p>Partita Iva: @Model.PI</p>
+    <p>Nome: @Model.Nome</p>
+    <p>Cognome: @Model.Cognome</p>
+    <p>Tel: @Model.Tel</p>
+    <p>Email: @Model.Email</p>
+
+}
+

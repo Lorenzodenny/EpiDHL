@@ -15,8 +15,12 @@
             <th scope="col">Telefono</th>
             <th scope="col">Nome</th>
             <th scope="col">Cognome</th>
-            <th scope="col">Delete</th>
-            <th scope="col">Modifica</th>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <th scope="col">Delete</th>
+                <th scope="col">Modifica</th>
+                <th scope="col">Dettagli</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -31,13 +35,18 @@
                 <td scope="col">@cliente.Tel</td>
                 <td scope="col">@cliente.Nome</td>
                 <td scope="col">@cliente.Cognome</td>
-                <td scope="col">
-                    @Html.ActionLink("Eliminastaaaamerda", "Delete", "Home", new { id = cliente.Cliente_ID }, new { @class = "btn btn-outline-danger" })
-                </td>
-                <td scope="col">
-                    @Html.ActionLink("Modifica", "Edit", "Home", new { id = cliente.Cliente_ID }, new { @class = "btn btn-outline-info" })
-                </td>
-
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <td scope="col">
+                        @Html.ActionLink("Eliminastaaaamerda", "Delete", "Home", new { id = cliente.Cliente_ID }, new { @class = "btn btn-outline-danger" })
+                    </td>
+                    <td scope="col">
+                        @Html.ActionLink("Modifica", "Edit", "Home", new { id = cliente.Cliente_ID }, new { @class = "btn btn-outline-info" })
+                    </td>
+                    <td scope="col">
+                        @Html.ActionLink("Dettagli", "Dettagli", "Home", new { id = cliente.Cliente_ID }, new { @class = "btn btn-outline-success" })
+                    </td>
+                }
             </tr>
         }
     </tbody>

@@ -18,16 +18,16 @@ namespace EpiDHL.Models
 
         // Codice Fiscale
         [Display(Name = "Codice Fiscale")]
-        [StringLength(16,  ErrorMessage = "Il codice fiscale deve avere 16 caratteri")]
+        [StringLength(16, MinimumLength = 16, ErrorMessage = "Il codice fiscale deve avere 16 caratteri")]
         public string Cod_Fisc {  get; set; }
 
         // Partita IVA
         [Display(Name = "Partita IVA")]
-        [StringLength(11, ErrorMessage = "la partita IVA deve avere 11 caratteri")]
+        [StringLength(11, MinimumLength = 11, ErrorMessage = "la partita IVA deve avere 11 caratteri")]
         public string PI { get; set; }
 
         // E-mail
-        [Required(ErrorMessage = "Campo Obbligatorio")]
+        [Required(ErrorMessage = "Email Campo Obbligatorio")]
         [Display(Name = "E-mail")]
         [StringLength(255, ErrorMessage = "L'email deve avere massimo 255 caratteri")]
         [RegularExpression(@"^[\w-.]+@([\w-]+.)+[\w-]{2,4}$", ErrorMessage = "Inserisci un indirizzo email valido")]
@@ -37,10 +37,11 @@ namespace EpiDHL.Models
         // Telefono/Cellulare
         [Display(Name = "Telefono/Cellulare")]
         [StringLength(20, MinimumLength = 7, ErrorMessage = "Minimo 7 cifre, massimo 20")]
+        [RegularExpression(@"^\d+$", ErrorMessage = "Il campo Tel accetta solo numeri.")]
         public string Tel {  get; set; }
 
         // Nome
-        [Required(ErrorMessage = "Campo Obbligatorio")]
+        [Required(ErrorMessage = " Nome Campo Obbligatorio")]
         [Display(Name = "Nome")]
         [StringLength(50, MinimumLength= 2,  ErrorMessage = "il nome deve contenere meno di 50 caratteri")]
 
