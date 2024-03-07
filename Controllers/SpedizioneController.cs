@@ -131,7 +131,7 @@ namespace EpiDHL.Controllers
             return View();
         }
 
-        public ActionResult Ricerca(Spedizione pacco)
+        public ActionResult Ricerca(string Spedizione)
         {
             List<Spedizione> spedizioni = new List<Spedizione>();
             try
@@ -140,9 +140,9 @@ namespace EpiDHL.Controllers
 
                 var cmd = new SqlCommand(@"SELECT * FROM Spedizioni
                                    INNER JOIN Clienti ON (Spedizioni.Cliente_ID = Clienti.Cliente_ID)
-                                   WHERE Spedizioni.Cod_Sped = @cod", Db.conn);
+                                   WHERE Spedizioni.Cod_Sped = @cod_sped", Db.conn);
 
-                cmd.Parameters.AddWithValue("@cod", pacco.Cod_Sped);
+                cmd.Parameters.AddWithValue("@cod_sped", Spedizione);
 
                 var reader = cmd.ExecuteReader();
 
@@ -198,9 +198,5 @@ namespace EpiDHL.Controllers
 
             return View();
         }
-
-
-
-
     }
 }

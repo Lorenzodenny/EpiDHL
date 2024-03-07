@@ -6,14 +6,15 @@
 
 <h2>Ricerca il tuo pacco</h2>
 
-@using (Html.BeginForm("Ricerca", "NomeController", FormMethod.Post))
+@using (Html.BeginForm("Ricerca", "Spedizione", FormMethod.Post))
 {
     <div class="form-group">
         @Html.LabelFor(model => model[0].Cod_Sped, "Codice Spedizione:")
-        @Html.TextBoxFor(model => model[0].Cod_Sped, new { @class = "form-control" })
+        @Html.TextBoxFor(model => model[0].Cod_Sped, new { @class = "form-control", type = "text" })
     </div>
     <button type="submit" class="btn btn-primary">Cerca</button>
 }
+
 
 
 @if (ViewBag.ErrorMessage != null)
@@ -31,7 +32,8 @@
         <p>@spedizione.Peso</p>
         <p>@spedizione.Indirizzo</p>
         <p>@spedizione.Conto</p>
-        <p>@spedizione.Cod_Sped</p>
+        <p>@spedizione.Cod_Sped.ToString()</p>
+
         <p>@spedizione.Data_Prev</p>
         <p>@spedizione.Citta_Dest</p>
         <p>@spedizione.Cliente.Nome</p>
@@ -44,4 +46,5 @@
         </div>
     }
 }
+
 
