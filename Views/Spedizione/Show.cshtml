@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>Show</h2>
+
+@if (Model.Spedizione_ID == 0)
+{
+    <p>vuoto</p>
+}
+else
+{
+    <p>@Model.Spedizione_ID</p>
+    <p>@Model.Data_Spedizione</p>
+    <p>@Model.Cod_Sped</p>
+    <p>@Model.Peso</p>
+    <p>@Model.Citta_Dest</p>
+    <p>@Model.Indirizzo</p>
+    <p>@Model.Destinatario</p>
+    <p>@Model.Conto</p>
+    <p>@Model.Data_Prev</p>
+    <p> Cliente -> @Model.Cliente_ID</p>
+    <p> Cliente -> @Model.Cliente.Email</p>
+    <p> Cliente -> @Model.Cliente.Tel</p>
+    <p> Cliente -> @Model.Cliente.Nome</p>
+    <p> Cliente -> @Model.Cliente.Cognome</p>
+    
+}

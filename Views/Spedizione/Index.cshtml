@@ -1,0 +1,41 @@
+﻿@using System.Web.Mvc.Html
+@model List<EpiDHL.Models.Spedizione>
+
+
+<h2> Sei in index</h2>
+
+<table class="table table-primary table-hover text-center">
+    <thead>
+        <tr>
+            <th scope="col">Spedizione_ID</th>
+            <th scope="col">Data_Spedizione</th>
+            <th scope="col">Cod_Sped</th>
+            <th scope="col">Peso</th>
+            <th scope="col">Citta_Dest</th>
+            <th scope="col">Indirizzo</th>
+            <th scope="col">Destinatario</th>
+            <th scope="col">Conto</th>
+            <th scope="col">Data_Prev</th>
+            <th scope="col">Cliente_ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var spedizione in Model)
+        {
+            <tr>
+                <td scope="col">@spedizione.Spedizione_ID</td>
+                <td scope="col">@spedizione.Data_Spedizione</td>
+                <td scope="col">@spedizione.Cod_Sped</td>
+                <td scope="col">@spedizione.Peso</td>
+                <td scope="col">@spedizione.Citta_Dest</td>
+                <td scope="col">@spedizione.Indirizzo</td>
+                <td scope="col">@spedizione.Destinatario</td>
+                <td scope="col">@spedizione.Conto</td>
+                <td scope="col">@spedizione.Cliente_ID</td>
+                <td scope="col">
+                    @Html.ActionLink("Dettagli", "Show", "Spedizione", new { id = spedizione.Spedizione_ID }, new { @class = "btn btn-outline-success" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

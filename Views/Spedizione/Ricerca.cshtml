@@ -1,0 +1,47 @@
+﻿@model List<EpiDHL.Models.Spedizione>
+
+@{
+    ViewBag.Title = "Ricerca";
+}
+
+<h2>Ricerca il tuo pacco</h2>
+
+@using (Html.BeginForm("Ricerca", "NomeController", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model[0].Cod_Sped, "Codice Spedizione:")
+        @Html.TextBoxFor(model => model[0].Cod_Sped, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Cerca</button>
+}
+
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    <h3>Risultati della ricerca:</h3>
+    foreach (var spedizione in Model)
+    {
+        <p>@spedizione.Peso</p>
+        <p>@spedizione.Indirizzo</p>
+        <p>@spedizione.Conto</p>
+        <p>@spedizione.Cod_Sped</p>
+        <p>@spedizione.Data_Prev</p>
+        <p>@spedizione.Citta_Dest</p>
+        <p>@spedizione.Cliente.Nome</p>
+        <p>@spedizione.Data_Spedizione</p>
+        <p>@spedizione.Cliente.Cognome</p>
+        <p>@spedizione.Cliente.Email</p>
+        <p>@spedizione.Cliente.Tel</p>
+        <div>
+            @Html.ActionLink("Dettagli", "Show", "Spedizione", new { id = spedizione.Spedizione_ID }, new { @class = "btn btn-outline-success" })
+        </div>
+    }
+}
+

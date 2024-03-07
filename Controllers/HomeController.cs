@@ -26,7 +26,7 @@ namespace EpiDHL.Controllers
 
                 if (reader.HasRows)
                 {
-                    while ( reader.Read())
+                    while (reader.Read())
                     {
                         var cliente = new Cliente()
                         {
@@ -72,7 +72,7 @@ namespace EpiDHL.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add([Bind(Include = "Azienda, Cod_Fisc, PI, Email, Tel, Nome, Cognome")] Cliente cliente)
         {
-            if (cliente.Azienda == true )
+            if (cliente.Azienda == true)
             {
                 if (cliente.Cod_Fisc == null && cliente.PI == null)
                 {
@@ -102,7 +102,7 @@ namespace EpiDHL.Controllers
 
                         if (cliente.Azienda)
                         {
-                         
+
                             if (string.IsNullOrEmpty(cliente.PI))
                             {
                                 if (ModelState.IsValid)
@@ -111,24 +111,24 @@ namespace EpiDHL.Controllers
                                 }
                             }
                             cmd.Parameters.AddWithValue("@pi", cliente.PI);
-                            cmd.Parameters.AddWithValue("@cod_fisc", DBNull.Value); 
+                            cmd.Parameters.AddWithValue("@cod_fisc", DBNull.Value);
                         }
-                        else 
+                        else
                         {
-                           
+
                             if (string.IsNullOrEmpty(cliente.Cod_Fisc))
                             {
-                                if(ModelState.IsValid)
+                                if (ModelState.IsValid)
                                 {
                                     return View(cliente);
                                 }
-                             
+
                             }
                             cmd.Parameters.AddWithValue("@cod_fisc", cliente.Cod_Fisc);
-                            cmd.Parameters.AddWithValue("@pi", DBNull.Value); 
+                            cmd.Parameters.AddWithValue("@pi", DBNull.Value);
                         }
 
-                        
+
                         cmd.Parameters.AddWithValue("@email", cliente.Email);
                         cmd.Parameters.AddWithValue("@tel", cliente.Tel);
                         cmd.Parameters.AddWithValue("@nome", cliente.Nome);
@@ -201,7 +201,7 @@ namespace EpiDHL.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete([Bind(Include = "Cliente_ID")] Cliente cliente)
         {
-           try
+            try
             {
                 Db.conn.Open();
 
@@ -269,27 +269,41 @@ namespace EpiDHL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Azienda, Cod_Fisc, PI, Email, Tel, Nome, Cognome")] Cliente cliente)
+        public ActionResult Edit([Bind(Include = "Cliente_ID, Azienda, Cod_Fisc, PI, Email, Tel, Nome, Cognome")] Cliente cliente)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+
+                    if (cliente.Azienda && string.IsNullOrEmpty(cliente.PI))
+                    {
+                        ModelState.AddModelError("PI", "Partita Iva è un campo obbligatorio");
+                        return View(cliente);
+                    }
+
+
+                    if (!cliente.Azienda && string.IsNullOrEmpty(cliente.Cod_Fisc))
+                    {
+                        ModelState.AddModelError("Cod_Fisc", "Codice Fiscale è un campo obbligatorio");
+                        return View(cliente);
+                    }
+
                     Db.conn.Open();
 
                     var cmd = new SqlCommand(@"UPDATE Clienti
-                                        SET Azienda = @azienda,
-                                            Cod_Fisc = @cod_fisc,
-                                            PI = @pi,
-                                            Email = @email,
-                                            Tel = @tel,
-                                            Nome = @nome,
-                                            Cognome = @cognome
-                                            WHERE Cliente_ID = @id", Db.conn);
+                                SET Azienda = @azienda,
+                                    Cod_Fisc = @cod_fisc,
+                                    PI = @pi,
+                                    Email = @email,
+                                    Tel = @tel,
+                                    Nome = @nome,
+                                    Cognome = @cognome
+                                    WHERE Cliente_ID = @id", Db.conn);
 
                     cmd.Parameters.AddWithValue("@azienda", cliente.Azienda);
-                    cmd.Parameters.AddWithValue("@cod_fisc", cliente.Cod_Fisc);
-                    cmd.Parameters.AddWithValue("@pi", cliente.PI);
+                    cmd.Parameters.AddWithValue("@cod_fisc", cliente.Azienda ? (object)DBNull.Value : cliente.Cod_Fisc);
+                    cmd.Parameters.AddWithValue("@pi", cliente.Azienda ? cliente.PI : (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@email", cliente.Email);
                     cmd.Parameters.AddWithValue("@tel", cliente.Tel);
                     cmd.Parameters.AddWithValue("@nome", cliente.Nome);
@@ -314,6 +328,8 @@ namespace EpiDHL.Controllers
             }
         }
 
+
+
         [HttpGet]
         public ActionResult Ricerca()
         {
@@ -323,6 +339,8 @@ namespace EpiDHL.Controllers
         [HttpPost]
         public ActionResult Ricerca(Cliente cliente)
         {
+
+            List<Cliente> clienti = new List<Cliente>();
             try
             {
                 Db.conn.Open();
@@ -331,11 +349,12 @@ namespace EpiDHL.Controllers
                 cmd.Parameters.AddWithValue("@nome", cliente.Nome);
 
                 var reader = cmd.ExecuteReader();
-                if (reader.Read())
+
+                while (reader.Read())
                 {
                     cliente = new Cliente()
                     {
-                        Cliente_ID = Convert.ToInt32(reader["Cliente_ID"]),
+                        Cliente_ID = (int)reader["Cliente_ID"],
                         Azienda = (bool)reader["Azienda"],
                         Cod_Fisc = reader["Cod_Fisc"].ToString(),
                         PI = reader["PI"].ToString(),
@@ -345,19 +364,23 @@ namespace EpiDHL.Controllers
                         Cognome = reader["Cognome"].ToString()
                     };
 
-                    reader.Close();
-                    return View(cliente);
+                    clienti.Add(cliente);
+                }
+                reader.Close();
+
+                if (clienti.Count > 0)
+                {
+                    return View(clienti);
                 }
                 else
                 {
                     ViewBag.ErrorMessage = "Nessun cliente trovato con questo nome";
                 }
 
-
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage =  "Errore nella ricerca" ;
+                ViewBag.ErrorMessage = "Errore nella ricerca";
             }
             finally
             {
@@ -367,9 +390,9 @@ namespace EpiDHL.Controllers
             return View();
         }
 
-       public ActionResult Dettagli(int id)
+        public ActionResult Dettagli(int? id)
         {
-            
+            var utente = new Cliente();
 
             try
             {
@@ -379,39 +402,50 @@ namespace EpiDHL.Controllers
                 cmd.Parameters.AddWithValue("@id", id);
 
                 var reader = cmd.ExecuteReader();
-                var cliente = new Cliente();
-                if (reader.HasRows)
-                {
-                    reader.Read();
-                    cliente.Cliente_ID = (int)reader["Cliente_ID"];
-                    cliente.Azienda = (bool)reader["Azienda"];
-                    cliente.Cod_Fisc = (string)reader["Cod_Fisc"];
-                    cliente.PI = (string)reader["PI"];
-                    cliente.Email = (string)reader["Email"];
-                    cliente.Tel = (string)reader["Tel"];
-                    cliente.Nome = (string)reader["Nome"];
-                    cliente.Cognome = (string)reader["Cognome"];
-                        
 
+
+                if (reader.Read())
+                {
+                    Cliente cliente = new Cliente()
+                    {
+                        Cliente_ID = (int)reader["Cliente_ID"],
+                        Azienda = (bool)reader["Azienda"],
+                        Cod_Fisc = reader["Cod_Fisc"] == DBNull.Value ? null : (string)reader["Cod_Fisc"],
+                        PI = reader["PI"] == DBNull.Value ? null : (string)reader["PI"],
+                        Email = (string)reader["Email"],
+                        Tel = (string)reader["Tel"],
+                        Nome = (string)reader["Nome"],
+                        Cognome = (string)reader["Cognome"]
+                    };
+
+                    if (string.IsNullOrEmpty(cliente.Cod_Fisc) && string.IsNullOrEmpty(cliente.PI))
+                    {
+                       
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        
+                        return View(cliente);
+                    }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = " il cliente non esiste";
+                    return RedirectToAction("Index");
                 }
-                return View(cliente);
 
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "problemi col dettaglio ";
+                ViewBag.ErrorMessage = "Problemi durante il recupero dei dettagli del cliente";
             }
             finally
             {
                 Db.conn.Close();
             }
-            return View();
-
+            return RedirectToAction("Index");
         }
+
 
         public ActionResult About()
         {

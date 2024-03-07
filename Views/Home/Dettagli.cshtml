@@ -15,9 +15,23 @@
 
 @if (Model.Cliente_ID == 0)
 {
-    <h2>Post non troato</h2>
+    <h2>Post non trovato</h2>
 }
-else
+else if (Model.Azienda == true)
+{
+    <h2>Azienda: @Model.Azienda</h2>
+
+    <h3>Nome: @Model.Nome</h3>
+
+    <h3>Cognome: @Model.Cognome</h3>
+
+    <h3>Partita IVA: @Model.PI</h3>
+
+    <h3>Email: @Model.Email</h3>
+
+    <h3>TEL: @Model.Tel</h3>
+}
+else if (Model.Azienda == false)
 {
     <h2>Azienda: @Model.Azienda</h2>
 
@@ -26,8 +40,6 @@ else
     <h3>Cognome: @Model.Cognome</h3>
 
     <h3>Codice Fiscale: @Model.Cod_Fisc</h3>
-
-    <h3>Partita IVA: @Model.PI</h3>
 
     <h3>Email: @Model.Email</h3>
 

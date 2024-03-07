@@ -1,4 +1,4 @@
-﻿@model EpiDHL.Models.Cliente
+﻿@model List<EpiDHL.Models.Cliente>
 
 @{
     ViewBag.Title = "Ricerca";
@@ -9,8 +9,8 @@
 @using (Html.BeginForm("Ricerca", "Home", FormMethod.Post))
 {
     <div class="form-group">
-        @Html.LabelFor(model => model.Nome, "Nome Cliente:")
-        @Html.TextBoxFor(model => model.Nome, new { @class = "form-control" })
+        @Html.LabelFor(model => model[0].Nome, "Nome Cliente:")
+        @Html.TextBoxFor(model => model[0].Nome, new { @class = "form-control" })
     </div>
     <button type="submit" class="btn btn-primary">Cerca</button>
 }
@@ -22,17 +22,22 @@
     </div>
 }
 
-@if (Model != null)
+@if (Model != null && Model.Count > 0)
 {
     <h3>Risultati della ricerca:</h3>
-    <p>Cliente ID: @Model.Cliente_ID</p>
-    <p>Azienda: @Model.Azienda</p>
-    <p>Codice Fiscale: @Model.Cod_Fisc</p>
-    <p>Partita Iva: @Model.PI</p>
-    <p>Nome: @Model.Nome</p>
-    <p>Cognome: @Model.Cognome</p>
-    <p>Tel: @Model.Tel</p>
-    <p>Email: @Model.Email</p>
-
+    foreach (var cliente in Model)
+    {
+        <p>Cliente ID: @cliente.Cliente_ID</p>
+        <p>Azienda: @cliente.Azienda</p>
+        <p>Codice Fiscale: @cliente.Cod_Fisc</p>
+        <p>Partita Iva: @cliente.PI</p>
+        <p>Nome: @cliente.Nome</p>
+        <p>Cognome: @cliente.Cognome</p>
+        <p>Tel: @cliente.Tel</p>
+        <p>Email: @cliente.Email</p>
+        <div>
+            @Html.ActionLink("Dettagli", "Dettagli", "Home", new { id = cliente.Cliente_ID }, new { @class = "btn btn-outline-success" })
+        </div>
+    }
 }
 

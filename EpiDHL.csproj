@@ -121,12 +121,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SpedizioneController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\Db.cs" />
+    <Compile Include="Models\Spedizione.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -190,6 +192,9 @@
     <Content Include="Views\Users\LoggedIn.cshtml" />
     <Content Include="Views\Home\Ricerca.cshtml" />
     <Content Include="Views\Home\Dettagli.cshtml" />
+    <Content Include="Views\Spedizione\Show.cshtml" />
+    <Content Include="Views\Spedizione\Ricerca.cshtml" />
+    <Content Include="Views\Spedizione\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
